@@ -297,7 +297,7 @@ void draw() {
   }
   //println(outputName);
   if (saveCollection) beginRecord(PDF, "pdf/"+timestampCollection+"/" + timeStamp+"#####_" + outputName + ".pdf");
-  if (savePDF) beginRecord(PDF, "pdf/" + timeStamp+"#####_" + outputName + ".pdf");
+  if (savePDF) // beginRecord(PDF, "pdf/" + timeStamp+"#####_" + outputName + ".pdf");
   //background(255);
   //blendMode(MULTIPLY  );
 
@@ -390,7 +390,7 @@ void draw() {
   if (savePDF ) {
     savePDF = false;
     saveFrame("png/"+timeStamp+"_######"+outputName+".png");
-    endRecord();
+    //endRecord();
   }
 
   if (saveCollection) {
