@@ -72,7 +72,7 @@ String timestampCollection;
 char[] dnaProteins = {'a', 't', 'c', 'g'};
 void setup() {
   //size(1000, 1000);
-fullScreen();
+  fullScreen();
   //AUDIO
   minim = new Minim(this); // initalize in setup   
   in = minim.getLineIn(Minim.STEREO, 512); // audio in + bufferSize 512 or 1024 
@@ -88,64 +88,8 @@ fullScreen();
   midiInit();
   seed =floor(random(100000));
 
-  //type_3_länglich
-  //2017_11_28_18153300761_12800_0.69_0.48_0.07_0.00_0.84_0.27_0.00_
-  //1.00_0.19_0.42_1.00_0.45_0.00_0.53_0.00_0.18
-  mixer2d[0][0] = .69;
-  mixer2d[0][1] = .48;
-  mixer2d[0][2] = 0.07;
-  mixer2d[0][3] = 0.00;
-  mixer2d[0][4] = 0.84;
-  mixer2d[0][5] = 0.27;
-  mixer2d[0][6] = .1;
-  mixer2d[0][7] = 1;
-  mixer2d[0][8] = 0.19;
-  mixer2d[0][9] = 0.42;
-  mixer2d[0][10] = 1;
-  mixer2d[0][11] = 0.45;
-  mixer2d[0][12] = 0;
-  mixer2d[0][13] = 0.53;
-  mixer2d[0][14] = 0;
-  mixer2d[0][15] = 0.18;
 
-
-  mixer2d[1][0] = .1;
-  mixer2d[1][1] = 0;
-  mixer2d[1][2] = 0;
-  mixer2d[1][3] = 0.00;
-  mixer2d[1][4] = 0.84;
-  mixer2d[1][5] = 0.27;
-  mixer2d[1][6] = 0;
-  mixer2d[1][7] = .5;
-
-  mixer2d[1][8] = 0.19;
-  mixer2d[1][9] = 0.42;
-  mixer2d[1][10] = 1;
-  mixer2d[1][11] = 0.45;
-  mixer2d[1][12] = 0;
-  mixer2d[1][13] = 0.53;
-  mixer2d[1][14] = 0;
-  mixer2d[1][15] = 0.18;
-
-
-  mixer2d[2][0] = 0;
-  mixer2d[2][1] = 0;
-  mixer2d[2][2] = 1;
-  mixer2d[2][3] = 0.00;
-  mixer2d[2][4] = 1;
-  mixer2d[2][5] = 1;
-  mixer2d[2][6] = 0;
-  mixer2d[2][7] = 0;
-
-  mixer2d[2][8] = 0;
-  mixer2d[2][9] = 0;
-  mixer2d[2][10] = 0;
-  mixer2d[2][11] = 1;
-  mixer2d[2][12] = 0;
-  mixer2d[2][13] = 1;
-  mixer2d[2][14] = 0;
-  mixer2d[2][15] = 0;
-
+  setMixerDefaults();
   resetMixer();
 
   //noLoop();
@@ -161,7 +105,11 @@ void draw() {
   remapMidiButton();
   gaussianFactor = mixer[6];
 
-  println(midiMode);
+//background(bg);
+//blendMode(DIFFERENCE);
+
+
+  //println(midiMode);
 
   /*for (int i = 0; i<mixer.length; i++) {
    if (mixerRandom[i]) {
@@ -190,86 +138,86 @@ void draw() {
   //if (valueIsInActiveArea(0)) {
   //rad = lerp(10, width/2, normalizedAudio);
   //}
-  maxOffset = setValueFromMixer(0,1,0,1,true,false); //lerp(0, 1, mixer2d[0][1]);
-  
-  numPoint = round(setValueFromMixer(3,60,0,2,true,true)); //floor(lerp(3, 60, mixer2d[0][2]));
-  
-  
-  edgeRate = setValueFromMixer(0,1,0,3,true,false);//mixer2d[0][3];
-  
+  maxOffset = setValueFromMixer(0, 1, 0, 1, true, false); //lerp(0, 1, mixer2d[0][1]);
+
+  numPoint = round(setValueFromMixer(3, 60, 0, 2, true, true)); //floor(lerp(3, 60, mixer2d[0][2]));
+
+
+  edgeRate = setValueFromMixer(0, 1, 0, 3, true, false);//mixer2d[0][3];
+
   float skewX;
 
-  skewX = setValueFromMixer(0,1,0,4,true,false);
-  
+  skewX = setValueFromMixer(0, 1, 0, 4, true, false);
+
   float skewY;
-  skewY = setValueFromMixer(0,1,0,5,true,false);
+  skewY = setValueFromMixer(0, 1, 0, 5, true, false);
 
 
   //strkW = .1;
 
   //strkW = .1;
-  rings = floor(setValueFromMixer(1,10,0,8,true,true));//lerp(1, 10, mixer2d[0][8]));
-  
+  rings = floor(setValueFromMixer(1, 10, 0, 8, true, true));//lerp(1, 10, mixer2d[0][8]));
 
 
-  ringsSpacing = setValueFromMixer(1,200,0,9,true,false);//lerp(1, 200, mixer2d[0][9]);
-  
 
-  
+  ringsSpacing = setValueFromMixer(1, width/8, 0, 9, true, false);//lerp(1, 200, mixer2d[0][9]);
+
+
+
   //ringsStrkRandomMin = lerp(.1, 10, mixer2d[0][10]);
   //ringsStrkRandomMax = lerp(ringsStrkRandomMin, 10, mixer2d[0][11]);
   //rotation = lerp(0,TWO_PI,mixer2d[0][6]);
-  scaleNum = setValueFromMixer(1,10,0,10,true,true);//lerp(1, 10, mixer2d[0][10]);
-  
-
-  scaleFactor= setValueFromMixer(.8,1.2,0,11,true,false); //lerp(.8, 1.2, mixer2d[0][11]); 
- 
-
-  rotationOffsetNum = setValueFromMixer(1,10,0,12,true,true);//lerp(1, 10, mixer2d[0][12]);
-  
+  scaleNum = setValueFromMixer(1, 10, 0, 10, true, true);//lerp(1, 10, mixer2d[0][10]);
 
 
-  rotationOffsetAngle = setValueFromMixer(0,HALF_PI/8,0,13,true,false); //lerp(0, HALF_PI/8, mixer2d[0][13]);
-  
+  scaleFactor= setValueFromMixer(.8, 1.2, 0, 11, true, false); //lerp(.8, 1.2, mixer2d[0][11]); 
+
+
+  rotationOffsetNum = setValueFromMixer(1, 10, 0, 12, true, true);//lerp(1, 10, mixer2d[0][12]);
+
+
+
+  rotationOffsetAngle = setValueFromMixer(0, HALF_PI/8, 0, 13, true, false); //lerp(0, HALF_PI/8, mixer2d[0][13]);
+
 
   float translationAngle;
-  translationAngle  = setValueFromMixer(0,TWO_PI,0,14,true,false); //lerp(0, TWO_PI, mixer2d[0][14]);
- 
+  translationAngle  = setValueFromMixer(0, TWO_PI, 0, 14, true, false); //lerp(0, TWO_PI, mixer2d[0][14]);
+
 
 
 
   float translationMag;
-  translationMag  = setValueFromMixer(0,100,0,15,true,false);// lerp(0, 100, mixer2d[0][15]);
-  
-
-  bgFade =  setValueFromMixer(0,255,1,0,true,true); // lerp(0, 255, mixer2d[1][0]);
-  
-colorMode(HSB,360,100,100,100);
+  translationMag  = setValueFromMixer(0, width/4, 0, 15, true, false);// lerp(0, 100, mixer2d[0][15]);
 
 
-  float strkMinH = setValueFromMixer(0,360,2,0,true,true);
-  float strkMinS = setValueFromMixer(0,100,2,1,true,true);
-  float strkMinB = setValueFromMixer(0,100,2,2,true,true);
-  
-  float strkMaxH = setValueFromMixer(0,360,2,3,true,true);
-  float strkMaxS = setValueFromMixer(0,100,2,4,true,true);
-  float strkMaxB = setValueFromMixer(0,100,2,5,true,true);
-  
-  float bgMinH = setValueFromMixer(0,360,2,8,true,true);
-  float bgMinS = setValueFromMixer(0,100,2,9,true,true);
-  float bgMinB = setValueFromMixer(0,100,2,10,true,true);
-  
-  float bgMaxH = setValueFromMixer(0,360,2,11,true,true);
-  float bgMaxS = setValueFromMixer(0,100,2,12,true,true);
-  float bgMaxB = setValueFromMixer(0,100,2,13,true,true);
-  
-  
-  strkMin = color(strkMinH, strkMinS,strkMinB);
-  strkMax = color(strkMaxH, strkMaxS,strkMaxB);
-bgMin = color(bgMinH, bgMinS,bgMinB);
-  bgMax = color(bgMaxH, bgMaxS,bgMaxB);
+  bgFade =  setValueFromMixer(0, 255, 1, 0, true, true); // lerp(0, 255, mixer2d[1][0]);
 
-colorMode(RGB);
+  colorMode(HSB, 360, 100, 100, 100);
+
+
+  float strkMinH = setValueFromMixer(0, 360, 2, 0, true, true);
+  float strkMinS = setValueFromMixer(0, 100, 2, 1, true, true);
+  float strkMinB = setValueFromMixer(0, 100, 2, 2, true, true);
+
+  float strkMaxH = setValueFromMixer(0, 360, 2, 3, true, true);
+  float strkMaxS = setValueFromMixer(0, 100, 2, 4, true, true);
+  float strkMaxB = setValueFromMixer(0, 100, 2, 5, true, true);
+
+  float bgMinH = setValueFromMixer(0, 360, 2, 8, true, true);
+  float bgMinS = setValueFromMixer(0, 100, 2, 9, true, true);
+  float bgMinB = setValueFromMixer(0, 100, 2, 10, true, true);
+
+  float bgMaxH = setValueFromMixer(0, 360, 2, 11, true, true);
+  float bgMaxS = setValueFromMixer(0, 100, 2, 12, true, true);
+  float bgMaxB = setValueFromMixer(0, 100, 2, 13, true, true);
+
+
+  strkMin = color(strkMinH, strkMinS, strkMinB);
+  strkMax = color(strkMaxH, strkMaxS, strkMaxB);
+  bgMin = color(bgMinH, bgMinS, bgMinB);
+  bgMax = color(bgMaxH, bgMaxS, bgMaxB);
+
+  colorMode(RGB);
   bg = lerpColor(bgMin, bgMax, mixer2d[1][1]);
   if (valueIsInActiveArea(1, 1)) {
     bg = lerpColor(bgMin, bgMax, normalizedAudio);
@@ -280,19 +228,20 @@ colorMode(RGB);
   }
 
 
-  rotationRate = setValueFromMixer(-0.4,0.4,1,8,true,false);//lerp(0, 0.4, mixer2d[1][8]);
-  
+  rotationRate = setValueFromMixer(-0.4, 0.4, 1, 8, true, false);//lerp(0, 0.4, mixer2d[1][8]);
 
-  seed = round(setValueFromMixer(10,1000,1,9,true,false)); //floor(lerp(10, 10000, mixer2d[1][9]));
 
-  int strobeFreq = round(setValueFromMixer(0,127,1,10,true,false));//lerp(0, 127, mixer2d[1][10]);
-  int strobeBlackFreq = round(setValueFromMixer(0,127,1,11,true,false));
+  seed = round(setValueFromMixer(10, 1000, 0, 7, true, false)); //floor(lerp(10, 10000, mixer2d[1][9]));
 
-ringsStrkRandomMin = setValueFromMixer(0,1,1,13,true,true);;
-  ringsStrkRandomMax = setValueFromMixer(ringsStrkRandomMin,1,1,14,true,true);
+  int strobeFreq = round(setValueFromMixer(0, 127, 1, 10, true, false));//lerp(0, 127, mixer2d[1][10]);
+  int strobeBlackFreq = round(setValueFromMixer(0, 127, 1, 11, true, false));
 
-  strkW = setValueFromMixer(.1,40,1,15,true,false);//lerp(.1, 10, mixer2d[1][15]);
-  
+  ringsStrkRandomMin = setValueFromMixer(0, 1, 1, 13, true, true);
+  ;
+  ringsStrkRandomMax = setValueFromMixer(ringsStrkRandomMin, 1, 1, 14, true, true);
+
+  strkW = setValueFromMixer(.1, 40, 1, 15, true, false);//lerp(.1, 10, mixer2d[1][15]);
+
 
 
   if (strobeFreq > 0) {
@@ -302,10 +251,10 @@ ringsStrkRandomMin = setValueFromMixer(0,1,1,13,true,true);;
       strk = lerpColor(strkMin, strkMax, 1-mixer2d[1][2]);
     }
   }
-  
-  if(strobeBlackFreq > 0){
+
+  if (strobeBlackFreq > 0) {
     if (frameCount%strobeBlackFreq == 0) {
-      
+
       strk = #000000;
     }
   }
@@ -450,76 +399,227 @@ ringsStrkRandomMin = setValueFromMixer(0,1,1,13,true,true);;
   }
 }
 
-void resetMixer() {
+void setMixerDefaults() {
+  //radius
+  mixer2dDefaults[0][0] = .69;
+  //points offset
+  mixer2dDefaults[0][1] = 0;
+  //points
+  mixer2dDefaults[0][2] = 1;
 
-  mixer2d[0][0] = .69;
-  mixer2d[0][1] = 0;
-  mixer2d[0][2] = 1;
-  mixer2d[0][3] = 0.00;
-  mixer2d[0][4] = .5;
-  mixer2d[0][5] = .5;
-  mixer2d[0][6] = .1;
-  mixer2d[0][7] = 1;
+  //rougness (if point should be rounded (0) or sharp(1)
+  mixer2dDefaults[0][3] = 0.00;
 
-  mixer2d[0][8] = 0;
-  mixer2d[0][9] = 0.42;
-  mixer2d[0][10] = 0;
-  mixer2d[0][11] = 0.65;
-  mixer2d[0][12] = 0;
-  mixer2d[0][13] = 0.53;
-  mixer2d[0][14] = 0;
-  mixer2d[0][15] = 0;
+  //skew x
+  mixer2dDefaults[0][4] = .5;
+  //skew y
+  mixer2dDefaults[0][5] = .5;
+
+  //audio easing
+  mixer2dDefaults[0][6] = .1;
+  //seed
+  mixer2dDefaults[0][7] = 1;
+
+  // num rings
+  mixer2dDefaults[0][8] = 0;
+  // rings offset
+  mixer2dDefaults[0][9] = 0.42;
+  //num scale
+  mixer2dDefaults[0][10] = 0;
+  //scale factor
+  mixer2dDefaults[0][11] = 0.65;
+  //num rotation
+  mixer2dDefaults[0][12] = 0;
+  //rotation angle
+  mixer2dDefaults[0][13] = 0.53;
+  //roation offset direction
+  mixer2dDefaults[0][14] = 0;
+  //rotation offset magnitude
+  mixer2dDefaults[0][15] = 0;
+
+  //background alpha (0: tansparent, 1: opaque)
+  mixer2dDefaults[1][0] = .1;
+  //fade background color between bg1 and bg2
+  mixer2dDefaults[1][1] = 0;
+  //fade stroke color between strk1 and strk2
+  mixer2dDefaults[1][2] = 0;
+
+  mixer2dDefaults[1][3] = 0;
+  mixer2dDefaults[1][4] = 0;
+  mixer2dDefaults[1][5] = 0;
+  //audio influence min (between 0 and 1)
+  mixer2dDefaults[1][6] = 0;
+  // audio influence max (between audio influece min and 4)
+  mixer2dDefaults[1][7] = .24;
+
+  //rotation speed
+  mixer2dDefaults[1][8] = 0.51;
+  //NOTHING was random seed
+  mixer2dDefaults[1][9] = 0.42;
+  //invert flicker frequency
+  mixer2dDefaults[1][10] = 0;
+  //black flicker frequency
+  mixer2dDefaults[1][11] = 0;
+  mixer2dDefaults[1][12] = 0;
+  //stroke weight randomness range min (between 0 and 1)
+  mixer2dDefaults[1][13] = 1;
+  //stroke weight randomness range max (between randomness min and 1
+  mixer2dDefaults[1][14] = 1;
+  //stroke weight
+  mixer2dDefaults[1][15] = 0.18;
+
+  //bg1 hue
+  mixer2dDefaults[2][0] = 0;
+  //bg1 saturation
+  mixer2dDefaults[2][1] = 0;
+  //bg1 brightness
+  mixer2dDefaults[2][2] = 1;
+  //bg2 hue
+  mixer2dDefaults[2][3] = 0.00;
+  //bg2 saturation
+  mixer2dDefaults[2][4] = 1;
+  //bg2 brightness
+  mixer2dDefaults[2][5] = 1;
+  mixer2dDefaults[2][6] = 0;
+  mixer2dDefaults[2][7] = 0;
+
+  //strk1 hue
+  mixer2dDefaults[2][8] = 0;
+  //strk1 saturation
+  mixer2dDefaults[2][9] = 0;
+  //strk1 brightness
+  mixer2dDefaults[2][10] = 0;
+  //strk2 hue
+  mixer2dDefaults[2][11] = 1;
+  //strk2 saturation
+  mixer2dDefaults[2][12] = 0;
+  //strk2 brightness
+  mixer2dDefaults[2][13] = 1;
+  mixer2dDefaults[2][14] = 0;
+  mixer2dDefaults[2][15] = 0;
 
 
-  mixer2d[1][0] = .1;
-  mixer2d[1][1] = 0;
-  mixer2d[1][2] = 0;
-  mixer2d[1][3] = 0.00;
-  mixer2d[1][4] = 0.84;
-  mixer2d[1][5] = 0.27;
-  mixer2d[1][6] = 0;
-  mixer2d[1][7] = .24;
-
-  mixer2d[1][8] = 0.51;
-  mixer2d[1][9] = 0.42;
-  mixer2d[1][10] = 0;
-  mixer2d[1][11] = 0.45;
-  mixer2d[1][12] = 0;
-  mixer2d[1][13] = 0.53;
-  mixer2d[1][14] = 0;
-  mixer2d[1][15] = 0.18;
-
-
-   for (int i = 0; i<audioDependant.length; i++) {
+  for (int i = 0; i<audioDependant.length; i++) {
     for (int j = 0; j<audioDependant[i].length; j++) {
       audioDependant[i][j] = false;
     }
   }
 }
 
-
-void randomizeMixer(){
-  
- 
-  
-   for (int i = 0; i<mixer2d.length; i++) {
+void resetMixer() {
+  for (int i = 0; i<mixer2d.length; i++) {
     for (int j = 0; j<mixer2d[i].length; j++) {
-      mixer2d[i][j] = random(0.0,1.0);
+      mixer2d[i][j] = mixer2dDefaults[i][j];
     }
   }
-  
-    
-    mixer2d[0][2] = random(0,.3);
-    mixer2d[0][8] = random(0,.3);
-    mixer2d[0][10] = random(0,.3);
-    mixer2d[0][12] = random(0,.3);
-  
-  /*for (int i = 0; i<audioDependant.length; i++) {
-    for (int j = 0; j<audioDependant[i].length; j++) {
-      audioDependant[i][j] = random(0,1)<0.5;
-    }
-  }*/
 }
+
+void resetMixerCurrentSet() {
+  for (int j = 0; j<mixer2d[midiMode].length; j++) {
+    mixer2d[midiMode][j] = mixer2dDefaults[midiMode][j];
+  }
+}
+
+
+
+
+
+void randomizeMixer() {
+randomSeed(millis());
+  for (int i = 0; i<mixer2d.length; i++) {
+    for (int j = 0; j<mixer2d[i].length; j++) {
+      mixer2d[i][j] = random(0.0, 1.0);
+    }
+  }
+
+
+  mixer2d[0][2] = random(0, .3);
+  mixer2d[0][8] = random(0, .3);
+  mixer2d[0][10] = random(0, .3);
+  mixer2d[0][12] = random(0, .3);
+
+  /*for (int i = 0; i<audioDependant.length; i++) {
+   for (int j = 0; j<audioDependant[i].length; j++) {
+   audioDependant[i][j] = random(0,1)<0.5;
+   }
+   }*/
+   randomSeed(seed);
+}
+
+void randomizeMixerCurrentSet() {
+randomSeed(millis());
+  for (int j = 0; j<mixer2d[midiMode].length; j++) {
+    mixer2d[midiMode][j] = random(0.0, 1.0);
+  }
+
+
+  if (midiMode ==0) {
+    mixer2d[0][2] = random(0, .3);
+    mixer2d[0][8] = random(0, .3);
+    mixer2d[0][10] = random(0, .3);
+    mixer2d[0][12] = random(0, .3);
+  }
+  randomSeed(seed);
+}
+
+void resetAudioDependant() {
+  for (int i = 0; i<audioDependant.length; i++) {
+    for (int j = 0; j<audioDependant[i].length; j++) {
+      audioDependant[i][j] = false;
+    }
+  }
+}
+
+void randomizeAudioDependant() {
+  randomSeed(millis());
+  for (int i = 0; i<audioDependant.length; i++) {
+    for (int j = 0; j<audioDependant[i].length; j++) {
+      audioDependant[i][j] = random(0, 1)<0.5;
+    }
+  }
+
+  audioDependant[0][2] = false;
+  audioDependant[0][8] = false;
+  audioDependant[0][10] = false;
+  audioDependant[0][12] = false;
+  randomSeed(seed);
+}
+
+
+void randomizeAudioDependantCurrentSet() {
+  randomSeed(millis());
+  for (int j = 0; j<audioDependant[midiMode].length; j++) {
+    audioDependant[midiMode][j] = random(0, 1)<0.5;
+  }
+
+  if (midiMode==0) {
+    audioDependant[0][2] = false;
+    audioDependant[0][8] = false;
+    audioDependant[0][10] = false;
+    audioDependant[0][12] = false;
+  }
+  randomSeed(seed);
+}
+
+void resetAudioDependantCurrentSet() {
+  for (int j = 0; j<audioDependant[midiMode].length; j++) {
+    audioDependant[midiMode][j] = false;
+  }
+}
+
+
+
+
+
+void saveCurrentSettings() {
+  for (int i =0; i<mixer.length; i++) {
+    println("mixer[" + i +"]");
+    printArray(mixer[i]);
+  }
+}
+
+
+
 
 float constrain01(float value) {
   return constrain(value, 0.0, 1.0);
@@ -545,6 +645,125 @@ boolean valueIsInActiveArea(int mode, int index) {
   return audioDependant[mode][index];
   //return (mixer2d[0][7] >= index / 15.0 && mixer2d[0][7] < (index + 1) / 15.0);
 }
+
+
+
+
+
+
+
+
+void mousePressed() {
+  seed+=100;
+  redraw();
+}
+
+
+
+
+void keyPressed() {
+  if (key == 32) {
+    //saveFrame("png/output_"+timestamp()+".png");
+    savePDF = true;
+  } 
+  if (keyCode == 38) { // up arrow 
+    amp += 5; 
+    ampWave = amp*10; 
+  } else if (keyCode == 40) { // down arrow 
+    amp -= 5; 
+    if (amp < 5) { 
+      amp = 5; 
+    } 
+    ampWave = amp*10; 
+  } 
+  if (key=='s') {
+    saveCollection = !saveCollection;
+    timestampCollection = timestamp();
+  }
+  if (key=='m') {
+    clear = true;
+  }
+
+  if (key=='r') {
+    resetMixer();
+  }
+  if (key=='t') {
+    resetAudioDependant();
+  }
+  if (key=='y') {
+    randomizeMixer();
+  }
+  if (key=='x') {
+    randomizeAudioDependant();
+  }
+
+  redraw();
+}
+
+
+void buttonPressed(int index) {
+  println("buttonPressed: " + index + " state: " + button[index]);
+  if (index >=40 && index<=45) {
+    if (button[index]) {
+      midiMode = index - 40;
+    } else {
+      midiMode = 0;
+    }
+  } 
+  if (button[index]) {
+    if (index >= 32 && index<=39) {
+      audioDependant[midiMode][index-24] = !audioDependant[midiMode][index-24];
+    } else if (index >= 64 && index<=71) {
+      audioDependant[midiMode][index-64] = !audioDependant[midiMode][index-64];
+    } else if (index == 46) {
+      resetMixer();
+    } else if (index == 48) {
+      randomizeMixer();
+    } else if (index == 49) {
+      resetMixer();
+    } else if (index == 50) {
+      randomizeMixerCurrentSet();
+    } else if (index == 51) {
+      resetMixerCurrentSet();
+    } else if (index == 52) {
+      randomizeAudioDependant();
+    } else if (index == 53) {
+      resetAudioDependant();
+    } else if (index == 54) {
+      randomizeAudioDependantCurrentSet();
+    } else if (index == 55) {
+      resetAudioDependantCurrentSet();
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 String convertToBase(int num, int base) {
@@ -582,48 +801,6 @@ int convertToDec(int num, int base) {
 
   return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-void mousePressed() {
-  seed+=100;
-  redraw();
-}
-
-
-
-
-void keyPressed() {
-  if (key == 32) {
-    //saveFrame("png/output_"+timestamp()+".png");
-    savePDF = true;
-  } 
-  if (key=='s') {
-    saveCollection = !saveCollection;
-    timestampCollection = timestamp();
-  }
-  if (key=='c') {
-    clear = true;
-  }
-
-  if (key=='r') {
-    resetMixer();
-  }
-  if(key=='y'){
-   randomizeMixer(); 
-  }
-  redraw();
-}
-
-
 
 String timestamp() {
   return new java.text.SimpleDateFormat("yyyy_MM_dd_kkmmss").format(new java.util.Date ());
@@ -708,6 +885,7 @@ import javax.sound.midi.ShortMessage;
 MidiBus myBus; // The MidiBus
 float[] mixer = new float[16]; //Array with Mixer
 float[][] mixer2d = new float[5][16];
+float[][] mixer2dDefaults = new float[5][16];
 boolean[] button = new boolean[72]; //Arrray with Buttons
 int midiMode = 0;
 
@@ -722,32 +900,7 @@ void midiInit() { //Put into setup() function
   }
 }
 
-void buttonPressed(int index) {
-  println("buttonPressed: " + index + " state: " + button[index]);
-  if (index >=40 && index<=45) {
-    if (button[index]) {
-      midiMode = index - 40;
-    } else {
-      midiMode = 0;
-    }
-    //DO SOMETHING
-  }
 
-  if (index >= 32 && index<=39) {
-    if (button[index]) {
-      audioDependant[midiMode][index-24] = !audioDependant[midiMode][index-24];
-    }
-  }
-  if (index >= 64 && index<=71) {
-    if (button[index]) {
-      audioDependant[midiMode][index-64] = !audioDependant[midiMode][index-64];
-    }
-  }
-  
-  if(index == 46 && button[index]){
-    resetMixer();
-  }
-}
 
 float mixerLerp(int index, float min, float max) {
   return lerp(min, max, mixer[index]);
@@ -760,14 +913,14 @@ void midiMessage(MidiMessage message) { // You can also use midiMessage(MidiMess
     mixer2d[midiMode][getIndex(message)] = map(getValue(message), 0, 127, 0, 1);
 
     println("button Index: " + getIndex(message) + "    value: " + mixer[getIndex(message)] +"   midiMode: " + midiMode);
-    printArray(mixer2d[0]);
-    printArray(mixer2d[1]);
+    //printArray(mixer2d[0]);
+    //printArray(mixer2d[1]);
   } else if (getIndex(message) >=16 && getIndex(message) < 25) {
     mixer[getIndex(message) - 8] = map(getValue(message), 0, 127, 0, 1);
     mixer2d[midiMode][getIndex(message) - 8] = map(getValue(message), 0, 127, 0, 1);
-    println("button Index: " + getIndex(message) + "    value: " + mixer[getIndex(message) - 8]+"   midiMode: " + midiMode);
-    printArray(mixer2d[0]);
-    printArray(mixer2d[1]);
+    //println("button Index: " + getIndex(message) + "    value: " + mixer[getIndex(message) - 8]+"   midiMode: " + midiMode);
+    //printArray(mixer2d[0]);
+    //printArray(mixer2d[1]);
   } else {
     if (getValue(message) == 127) {
       button[getIndex(message)] = true;
