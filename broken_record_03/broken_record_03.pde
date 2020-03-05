@@ -1,3 +1,5 @@
+boolean debug = true;
+
 import ddf.minim.*;   
 import ddf.minim.analysis.*;  
 Minim minim;   
@@ -10,6 +12,7 @@ float amp = 15; // from testing, 15 seems to be good...
 float ampWave; // used to strengthen signal   
 float avgAudio; // store avg volume  
 float maxAudio = 10; // store loudest volume
+float maxAudioDamping = 0.995; 
 float easeAudio; 
 float easing = 0.25; // easing amount
 float normalizedAudio;
@@ -105,8 +108,8 @@ void draw() {
   remapMidiButton();
   gaussianFactor = mixer[6];
 
-//background(bg);
-//blendMode(DIFFERENCE);
+  //background(bg);
+  //blendMode(DIFFERENCE);
 
 
   //println(midiMode);
@@ -298,16 +301,16 @@ void draw() {
   //println(outputName);
   if (saveCollection) beginRecord(PDF, "pdf/"+timestampCollection+"/" + timeStamp+"#####_" + outputName + ".pdf");
   if (savePDF) // beginRecord(PDF, "pdf/" + timeStamp+"#####_" + outputName + ".pdf");
-  //background(255);
-  //blendMode(MULTIPLY  );
+    //background(255);
+    //blendMode(MULTIPLY  );
 
 
 
 
-  if (clear) {
-    background(bg);
-    clear = false;
-  }
+    if (clear) {
+      background(bg);
+      clear = false;
+    }
   backgroundFade(round(bgFade));
   translate(width/2, height/2);
   rotate(rotation);
@@ -396,6 +399,10 @@ void draw() {
   if (saveCollection) {
     saveFrame("png/" +timestampCollection+"/" + timeStamp+"#####_"+outputName+".png");
     endRecord();
+  }
+
+  if (debug) {
+    drawEQ();
   }
 }
 
@@ -525,7 +532,7 @@ void resetMixerCurrentSet() {
 
 
 void randomizeMixer() {
-randomSeed(millis());
+  randomSeed(millis());
   for (int i = 0; i<mixer2d.length; i++) {
     for (int j = 0; j<mixer2d[i].length; j++) {
       mixer2d[i][j] = random(0.0, 1.0);
@@ -543,11 +550,11 @@ randomSeed(millis());
    audioDependant[i][j] = random(0,1)<0.5;
    }
    }*/
-   randomSeed(seed);
+  randomSeed(seed);
 }
 
 void randomizeMixerCurrentSet() {
-randomSeed(millis());
+  randomSeed(millis());
   for (int j = 0; j<mixer2d[midiMode].length; j++) {
     mixer2d[midiMode][j] = random(0.0, 1.0);
   }
@@ -668,13 +675,13 @@ void keyPressed() {
   } 
   if (keyCode == 38) { // up arrow 
     amp += 5; 
-    ampWave = amp*10; 
+    ampWave = amp*10;
   } else if (keyCode == 40) { // down arrow 
     amp -= 5; 
     if (amp < 5) { 
-      amp = 5; 
+      amp = 5;
     } 
-    ampWave = amp*10; 
+    ampWave = amp*10;
   } 
   if (key=='s') {
     saveCollection = !saveCollection;
@@ -695,6 +702,9 @@ void keyPressed() {
   }
   if (key=='x') {
     randomizeAudioDependant();
+  }
+  if (key=='d') {
+    debug = !debug;
   }
 
   redraw();
@@ -764,7 +774,29 @@ void buttonPressed(int index) {
 
 
 
+void drawEQ() {
 
+  resetMatrix();
+
+  for (int i=0; i < fft.avgSize (); i++) {  
+    float x = map(i, 0, fft.avgSize(), 0, width); 
+    float w = width/fft.avgSize(); 
+    float a = fft.getAvg(i)*amp; 
+
+    noFill();
+    stroke(a);
+    rect(x, height, w, -a); // -a to make rectangle grow upwards!
+  }
+
+  fill(255);
+  text("avgAudio", width-100, 40);
+  rect(width, 50, -avgAudio, 50);
+  text("easeAudio", width-100, 140);
+  rect(width, 150, -easeAudio, 50);
+  text("maxAudio", width-100, 240);
+  rect(width, 250, -maxAudio, 50);
+  noFill();
+}
 
 String convertToBase(int num, int base) {
   String s = "";
@@ -830,10 +862,15 @@ void updateAvgAudio() {
   easeAudio += dx * easing;
 
   // update maxAudio
-  if (frameCount%120 == 0) {
-    maxAudio = 10;
-  } else if (avgAudio > maxAudio) {
+  /*if (frameCount%120 == 0) {
+   maxAudio = 10;
+   } else if (avgAudio > maxAudio) {
+   maxAudio = avgAudio;
+   }*/
+  if (avgAudio > maxAudio) {
     maxAudio = avgAudio;
+  } else {
+    maxAudio *= maxAudioDamping;
   }
 }
 
