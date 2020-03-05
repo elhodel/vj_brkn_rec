@@ -1,4 +1,4 @@
-boolean debug = true;
+boolean debug = false;
 
 import ddf.minim.*;   
 import ddf.minim.analysis.*;  
@@ -647,8 +647,6 @@ float setValueFromMixer(float min, float max, int midiMode, int midiIndex, boole
 }
 
 boolean valueIsInActiveArea(int mode, int index) {
-
-
   return audioDependant[mode][index];
   //return (mixer2d[0][7] >= index / 15.0 && mixer2d[0][7] < (index + 1) / 15.0);
 }
